@@ -1,31 +1,32 @@
-var debug = process.env.NODE_ENV !== "production";
-var webpack = require('webpack');
-var path = require('path');
+'use strict'
+const NODE_ENV = process.env.NODE_ENV
+const DEBUG = NODE_ENV === 'production'
+const PRODUCTION_PATH = __dirname.concat('/public/')
+
+const OUTPUT_JS_FILENAME = 'bundle.min.js'
+const OUTPUT_JS_FILEPATH = DEBUG ? PRODUCTION_PATH.concat(OUTPUT_JS_FILENAME) : OUTPUT_JS_FILENAME
+
+const OUTPUT_CSS_FILENAME = 'bundle.min.css'
+const OUTPUT_CSS_FILEPATH = DEBUG ? PRODUCTION_PATH.concat(OUTPUT_CSS_FILENAME) : OUTPUT_CSS_FILENAME
+
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  context: path.join(__dirname, "src"),
-  devtool: debug ? "inline-sourcemap" : null,
-  entry: "./js/client.js",
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015', 'stage-0'],
-          plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
-        }
-      }
-    ]
-  },
+  entry: './app/index.js',
   output: {
-    path: __dirname + "/src/",
-    filename: "client.min.js"
+    filename: OUTPUT_JS_FILEPATH
   },
-  plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
-  ],
+  module: {
+    loaders: [{
+      test: /\.js$/,
+      loaders: ['react-hot', 'jsx', 'babel'],
+      exclude: /node_modules/
+    }, {
+      test: /\.scss$/,
+      loader: ExtractTextPlugin.extract('css!sass')
+    }]
+  },
+  plugins: [
+    new ExtractTextPlugin(OUTPUT_CSS_FILEPATH, { allChunks: true })
+  ]
 };
