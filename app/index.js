@@ -1,5 +1,14 @@
+'use strict'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ReactApp from './components/App'
+import { Provider } from 'react-redux'
+import Layout from './layout'
+import Reducer from './reducers'
+import Store from "./store"
 
-ReactDOM.render(<ReactApp />, document.getElementById('app'))
+const store = new Store(Reducer).createInstance()
+
+ReactDOM.render(<Provider store={store}>
+  <Layout />
+</Provider>, document.getElementById('app'))
