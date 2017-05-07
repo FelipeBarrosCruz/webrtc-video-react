@@ -1,6 +1,7 @@
 'use strict'
 
 import React from 'react'
+import VideoComponent from '../components/video'
 import './index.scss'
 
 export default class Layout extends React.Component {
@@ -9,7 +10,7 @@ export default class Layout extends React.Component {
     super()
     this.state = {
       header: {
-        text: 'Hello World'
+        text: 'Simple WebRCT Video based on React and Redux'
       }
     }
   }
@@ -20,6 +21,12 @@ export default class Layout extends React.Component {
         <h1 className="text-center app-title">
           {this.state.header.text}
         </h1>
+
+        <p className="text-center">
+          
+        <VideoComponent />
+
+        </p>
       </div>
     )
   }
