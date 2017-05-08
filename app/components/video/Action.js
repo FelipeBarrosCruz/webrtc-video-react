@@ -1,21 +1,28 @@
 'use strict'
 
+import ReactDOM from 'react-dom'
+
 export default class Action {
 
-  constructor(state) {
-    this.state = state
+  constructor(Element) {
+    this.element = ReactDOM.findDOMNode(Element)
+    this.state = Element.state
     this.MEDIA_OPTIONS = { audio: false, video: true }
   }
 
+  getElement () {
+    return this.element
+  }
+
   ready (done) {
-    this.videoContainer = document.getElementById(this.state.id)
-    var p = navigator.getUserMedia(this.MEDIA_OPTIONS, (stream) => {
+    navigator.getUserMedia(this.MEDIA_OPTIONS, (stream) => {
       try {
-        this.videoContainer.src = window.URL.createObjectURL(stream)
-        return done(null, { stream: stream, videoContainer: this.videoContainer }) 
+        this.element.src = window.URL.createObjectURL(stream)
+        return done(null, { stream: stream, element: this.elemeent }) 
       } catch (err) {
         return done(err, null)
       }
     }, err => done(err, null))
+    return this;
   }
 }

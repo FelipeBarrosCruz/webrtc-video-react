@@ -9,11 +9,10 @@ export default class VideoComponent extends React.Component {
       id: 'videoContainer',
       poster: 'http://www.kplonline.org/dashboard/img/videocover.png'
     }
-    this.action = new Action(this.state)
   }
 
   componentDidMount () {
-    this.action.ready((err, result) => {
+    this.action = new Action(this).ready((err, result) => {
       if (err) {
         return console.error('Video Err', err)
       }
